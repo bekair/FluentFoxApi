@@ -1,11 +1,33 @@
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using FluentFoxApi.Configuration;
+using FluentFoxApi.Middleware;
+using Serilog;
+using Serilog.Events;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/api-.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Add FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Add Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();
@@ -112,6 +134,10 @@ app.UseHttpsRedirection();
 
 // Use CORS
 app.UseCors("AllowClient");
+
+// Add custom middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
