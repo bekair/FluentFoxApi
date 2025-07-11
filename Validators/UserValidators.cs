@@ -120,9 +120,9 @@ namespace FluentFoxApi.Validators
 
             RuleFor(x => x.Date)
                 .NotEmpty().WithMessage("Date is required")
-                .GreaterThanOrEqualTo(DateTime.Today.AddDays(-30))
+                .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today.AddDays(-30)))
                 .WithMessage("Date cannot be more than 30 days in the past")
-                .LessThanOrEqualTo(DateTime.Today.AddDays(30))
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today.AddDays(30)))
                 .WithMessage("Date cannot be more than 30 days in the future");
         }
     }

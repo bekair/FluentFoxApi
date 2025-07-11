@@ -44,11 +44,10 @@ namespace FluentFoxApi.Models
     // Non-generic version for cases where no data is returned
     public class ApiResponse : ApiResponse<object>
     {
-        public static ApiResponse Success(string message = "Operation successful")
+        public static new ApiResponse Success(string message = "Operation successful")
         {
             return new ApiResponse
             {
-                Success = true,
                 Message = message
             };
         }
@@ -57,7 +56,6 @@ namespace FluentFoxApi.Models
         {
             return new ApiResponse
             {
-                Success = false,
                 Message = message,
                 Errors = errors ?? new List<string>()
             };
@@ -67,7 +65,6 @@ namespace FluentFoxApi.Models
         {
             return new ApiResponse
             {
-                Success = false,
                 Message = message,
                 Errors = new List<string> { error }
             };

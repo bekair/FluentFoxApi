@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using FluentFoxApi.Models;
 using FluentFoxApi.Exceptions;
+using System.Security.Claims;
 
 namespace FluentFoxApi.Controllers
 {
@@ -22,6 +24,7 @@ namespace FluentFoxApi.Controllers
         /// </summary>
         /// <returns>List of users</returns>
         [HttpGet]
+        [Authorize]
         public ActionResult<ApiResponse<List<User>>> GetUsers()
         {
             _logger.LogInformation("Getting all users");

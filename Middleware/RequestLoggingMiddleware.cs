@@ -24,7 +24,7 @@ namespace FluentFoxApi.Middleware
             var requestId = Guid.NewGuid().ToString();
             
             // Add request ID to response headers for tracing
-            context.Response.Headers.Add("X-Request-ID", requestId);
+            context.Response.Headers["X-Request-ID"] = requestId;
 
             // Log request
             await LogRequest(context, requestId);
